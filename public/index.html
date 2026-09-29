@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeedone — Platform E-Learning & Bimbel Online Masa Kini</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN SYSTEM & VARIABLES
+═══════════════════════════════════════════════ */
+:root {
+  --navy: #0f172a;
+  --navy-light: #1e293b;
+  --blue: #2563eb;
+  --blue-hover: #1d4ed8;
+  --blue-soft: #eff6ff;
+  --cyan: #0284c7;
+  --emerald: #10b981;
+  --emerald-soft: #ecfdf5;
+  --amber: #f59e0b;
+  --amber-soft: #fffbeb;
+  --purple: #8b5cf6;
+  --purple-soft: #f5f3ff;
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --nav-h: 64px;
+  --fh: 'Plus Jakarta Sans', sans-serif;
+  --fb: 'Nunito', sans-serif;
+  --radius: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--fb);
+  background: #cbd5e1;
+  color: var(--text);
+}
+
+#shell {
+  max-width: 440px;
+  height: 100dvh;
+  margin: 0 auto;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(15, 23, 42, 0.25);
+  position: relative;
+}
+
+.screen {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+  padding-bottom: 24px;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  padding: 14px 18px 10px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand-sm {
+  font-family: var(--fh);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+.brand-sm .zee { color: var(--blue); }
+.brand-sm .done { color: var(--emerald); }
+.tbicons { display: flex; gap: 6px; }
+.ib {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--muted);
+  transition: .15s;
+  position: relative;
+}
+.ib:hover { background: var(--gray-100); color: var(--text); }
+.badge-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 1.5px solid var(--white);
+}
+.greeting {
+  font-size: 13px;
+  color: var(--muted);
+  padding-top: 3px;
+}
+.greeting strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+/* ─── BOTTOM NAVIGATION ─── */
+#bnav {
+  height: var(--nav-h);
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  padding: 0 6px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+.ni {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 11px;
+  font-family: var(--fb);
+  font-weight: 700;
+  padding: 6px 0;
+  border-radius: 10px;
+  transition: .15s;
+  position: relative;
+}
+.ni .ico { font-size: 20px; }
+.ni.active { color: var(--blue); }
+.ni.active::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  width: 20px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--emerald));
+  border-radius: 2px;
+}
+
+/* ─── SPLASH & AUTH SCREEN ─── */
+#s-splash {
+  background: linear-gradient(155deg, #0f172a 0%, #1e3a8a 50%, #065f46 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+#s-splash.active { display: flex; }
+.logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+.brand-big {
+  font-family: var(--fh);
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+.brand-big .zee { color: #fff; }
+.brand-big .done { color: #86efac; }
+.tagline {
+  font-size: 13px;
+  color: #bfdbfe;
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+.card-login {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 24px;
+  padding: 24px 20px;
+  backdrop-filter: blur(24px);
+}
+.tab-bar {
+  display: flex;
+  margin-bottom: 18px;
+}
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  color: #bfdbfe;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  transition: .2s;
+}
+.tab.on {
+  color: #fff;
+  border-bottom-color: #86efac;
+}
+.fl { margin-bottom: 13px; }
+.fl label {
+  display: block;
+  color: #bfdbfe;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.fl input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 14px;
+  font-family: var(--fb);
+  outline: none;
+  transition: .2s;
+}
+.fl input:focus {
+  border-color: #86efac;
+  background: rgba(255, 255, 255, 0.22);
+}
+.fl input::placeholder { color: rgba(255, 255, 255, 0.4); }
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: var(--fb);
+  cursor: pointer;
+  transition: .2s;
+  margin-top: 6px;
+}
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-primary:active { transform: scale(0.98); }
+.login-note {
+  text-align: center;
+  margin-top: 14px;
+  color: #bfdbfe;
+  font-size: 12px;
+}
+
+/* ─── HERO CARD (Subscription) ─── */
+.hero-card {
+  margin: 14px;
+  border-radius: 20px;
+  padding: 22px 20px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+}
+.hero-card.unsubscribed {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #0284c7 100%);
+}
+.hero-card.subscribed {
+  background: linear-gradient(135deg, #4338ca 0%, #7c3aed 50%, #db2777 100%);
+}
+.hero-card::before {
+  content: '';
+  position: absolute;
+  right: -25px;
+  top: -25px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-family: var(--fh);
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.hero-sub {
+  font-size: 12px;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #1e3a8a;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: .2s;
+  border: none;
+}
+.hero-btn:hover { background: #f8fafc; transform: translateY(-1px); }
+
+/* ─── SECTION TITLE & QUICK MENU ─── */
+.sec-title {
+  padding: 18px 16px 8px;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: var(--fh);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sec-title a {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: 700;
+  cursor: pointer;
+}
+.qgrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 0 14px;
+}
+.qi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 12px 4px;
+  border-radius: 14px;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  transition: .15s;
+}
+.qi:hover {
+  background: var(--blue-soft);
+  border-color: #bfdbfe;
+  transform: translateY(-2px);
+}
+.qi-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.qi-lbl {
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ─── COURSE CAROUSEL / SCROLL ─── */
+.cscroll {
+  display: flex;
+  gap: 12px;
+  padding: 0 14px 4px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+.cscroll::-webkit-scrollbar { display: none; }
+.ccard {
+  min-width: 180px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: .2s;
+  display: flex;
+  flex-direction: column;
+}
+.ccard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+.cc-thumb {
+  height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  position: relative;
+}
+.cc-access-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #fff;
+}
+.badge-free {
+  background: #10b981;
+}
+.badge-sub {
+  background: linear-gradient(90deg, #7c3aed, #db2777);
+}
+.cc-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.cc-subj {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.cc-title {
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 8px;
+  flex: 1;
+}
+.cc-meta {
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cc-prog {
+  height: 4px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.cc-bar {
+  height: 100%;
+  background: var(--emerald);
+  border-radius: 2px;
+}
+
+/* ─── BELAJAR SCREEN & TABS ─── */
+.belajar-tabs {
+  display: flex;
+  padding: 10px 14px 4px;
+  gap: 8px;
+}
+.btab {
+  flex: 1;
+  padding: 11px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  background: var(--gray-100);
+  color: var(--muted);
+  transition: .15s;
+}
+.btab.on {
+  background: var(--blue);
+  color: #fff;
+}
+.sbar {
+  margin: 10px 14px;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+}
+.sbar input {
+  width: 100%;
+  padding: 11px 0;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: var(--fb);
+  outline: none;
+}
+.filter-pills {
+  display: flex;
+  gap: 6px;
+  padding: 0 14px 10px;
+  overflow-x: auto;
+}
+.filter-pills::-webkit-scrollbar { display: none; }
+.fpill {
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: .15s;
+}
+.fpill.on {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+.cgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 4px 14px 16px;
+}
+.cgc {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: .2s;
+  display: flex;
+  flex-direction: column;
+}
+.cgc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+.cgc-th {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  position: relative;
+}
+.cgc-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 6px;
+  color: #fff;
+}
+.cgc-b {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.cgc-subj {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.cgc-name {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  flex: 1;
+}
+.cgc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.cgc-tag {
+  font-weight: 800;
+}
+.cgc-tag.free { color: var(--emerald); }
+.cgc-tag.sub { color: #9333ea; }
+
+/* ─── VIDEO LIST ITEMS ─── */
+.kelas-pills {
+  display: flex;
+  gap: 6px;
+  padding: 0 14px 10px;
+}
+.kpill {
+  flex: 1;
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: .15s;
+}
+.kpill.on {
+  background: var(--emerald);
+  color: #fff;
+  border-color: var(--emerald);
+}
+.video-section {
+  padding: 0 14px;
+}
+.vbab-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: .15s;
+}
+.vbab-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(37,99,235,0.08);
+}
+.vbab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.vbab-title {
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.vbab-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+/* ─── SUBSCRIPTION SCREEN ─── */
+.sub-hero {
+  margin: 14px;
+  padding: 24px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%);
+  color: #fff;
+  text-align: center;
+}
+.sub-hero-title {
+  font-family: var(--fh);
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.sub-hero-sub {
+  font-size: 13px;
+  color: #c7d2fe;
+  line-height: 1.5;
+}
+.plan-cards {
+  padding: 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.plan-card {
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  background: var(--white);
+  position: relative;
+  transition: .2s;
+}
+.plan-card.featured {
+  border-color: #7c3aed;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+}
+.plan-ribbon {
+  position: absolute;
+  top: -12px;
+  right: 18px;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 12px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.plan-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.plan-name {
+  font-family: var(--fh);
+  font-size: 18px;
+  font-weight: 800;
+}
+.plan-price {
+  font-family: var(--fh);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--blue);
+}
+.plan-price span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.plan-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.plan-features li {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.plan-features li::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #059669;
+  font-size: 11px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.btn-sub {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--fb);
+  cursor: pointer;
+  transition: .2s;
+}
+.btn-sub.primary {
+  background: linear-gradient(90deg, #7c3aed, #4f46e5);
+  color: #fff;
+}
+.btn-sub.primary:hover { filter: brightness(1.08); }
+.btn-sub.outline {
+  background: var(--gray-50);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.btn-sub.outline:hover { background: var(--gray-100); }
+
+/* ─── TUTOR PROFILES SCREEN ─── */
+.tutor-hero {
+  margin: 14px;
+  padding: 20px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #065f46 0%, #0d9488 100%);
+  color: #fff;
+}
+.tutor-hero-title {
+  font-family: var(--fh);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.tutor-hero-sub {
+  font-size: 12px;
+  opacity: 0.9;
+}
+.tutor-list {
+  padding: 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tutor-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  transition: .2s;
+  cursor: pointer;
+}
+.tutor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  border-color: #99f6e4;
+}
+.tc-av {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #f0fdf4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  border: 1px solid #bbf7d0;
+}
+.tc-info { flex: 1; }
+.tc-name {
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+.tc-subj {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan);
+  margin-bottom: 6px;
+}
+.tc-edu {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.tc-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.tc-rating { color: #d97706; }
+.tc-students { color: var(--muted); }
+
+/* ─── MODALS ─── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+}
+.overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal {
+  width: 100%;
+  max-width: 440px;
+  background: var(--white);
+  border-radius: 24px 24px 0 0;
+  padding: 24px 22px 36px;
+  transform: translateY(40px);
+  transition: .3s;
+  max-height: 88vh;
+  overflow-y: auto;
+  position: relative;
+}
+.overlay.open .modal { transform: translateY(0); }
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--gray-100);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.modal-title {
+  font-family: var(--fh);
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.modal-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+/* ─── VIDEO PLAYER MODAL ─── */
+.yt-player-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  background: #000;
+}
+.yt-player-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 14px;
+}
+.video-list-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vli {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: var(--gray-50);
+  border: 1px solid var(--border);
+  transition: .15s;
+}
+.vli:hover, .vli.active {
+  background: var(--blue-soft);
+  border-color: var(--blue);
+}
+.vli-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--navy);
+  flex-shrink: 0;
+}
+.vli.active .vli-num {
+  background: var(--blue);
+  color: #fff;
+}
+.vli-info { flex: 1; }
+.vli-title { font-size: 12px; font-weight: 700; line-height: 1.3; }
+.vli-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── TOAST NOTIFICATION ─── */
+.toast {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #0f172a;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s;
+  z-index: 100;
+  white-space: nowrap;
+  max-width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ─── SKELETON ─── */
+.skeleton {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: skel 1.5s infinite;
+}
+@keyframes skel {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="shell">
+
+  <!-- ══════════ 1. SPLASH & AUTH SCREEN ══════════ -->
+  <div class="screen active" id="s-splash">
+    <div class="logo-area">
+      <svg width="84" height="84" viewBox="0 0 200 200" fill="none">
+        <defs>
+          <linearGradient id="zg" x1="30" y1="20" x2="170" y2="180">
+            <stop offset="0%" stop-color="#1e3a8a"/>
+            <stop offset="55%" stop-color="#2563eb"/>
+            <stop offset="100%" stop-color="#10b981"/>
+          </linearGradient>
+        </defs>
+        <path d="M30 30L150 30L150 55L75 130L160 130L160 170L30 170L30 145L110 70L30 70Z" fill="url(#zg)"/>
+        <circle cx="130" cy="30" r="28" fill="#1e3a8a"/>
+        <path d="M118 22L142 22L128 36L142 36" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <rect x="118" y="12" width="24" height="3" rx="1.5" fill="#fbbf24"/>
+        <path d="M130 10L130 12M122 12L120 10M138 12L140 10" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="brand-big"><span class="zee">zee</span><span class="done">done</span></div>
+        <div class="tagline">Platform Belajar Online & Bimbel Masa Kini</div>
+      </div>
+    </div>
+
+    <div class="card-login">
+      <div class="tab-bar">
+        <div class="tab on" id="tab-login" onclick="switchAuthTab('login')">Masuk</div>
+        <div class="tab" id="tab-reg" onclick="switchAuthTab('reg')">Daftar Akun</div>
+      </div>
+
+      <div id="form-login">
+        <div class="fl">
+          <label>EMAIL</label>
+          <input type="email" id="l-email" placeholder="nama@email.com" value="demo@zeedone.id">
+        </div>
+        <div class="fl">
+          <label>PASSWORD</label>
+          <input type="password" id="l-pass" placeholder="••••••••" value="zeedone123">
+        </div>
+        <button class="btn-primary" id="btn-login" onclick="doLogin()">Masuk Belajar Sekarang</button>
+        <div class="login-note">Akun Demo: demo@zeedone.id / zeedone123</div>
+      </div>
+
+      <div id="form-reg" style="display:none">
+        <div class="fl">
+          <label>NAMA LENGKAP</label>
+          <input type="text" id="r-name" placeholder="Nama lengkap siswa">
+        </div>
+        <div class="fl">
+          <label>EMAIL</label>
+          <input type="email" id="r-email" placeholder="nama@email.com">
+        </div>
+        <div class="fl">
+          <label>NOMOR WHATSAPP</label>
+          <input type="tel" id="r-phone" placeholder="08123456789">
+        </div>
+        <div class="fl">
+          <label>PASSWORD</label>
+          <input type="password" id="r-pass" placeholder="Min. 6 karakter">
+        </div>
+        <button class="btn-primary" id="btn-reg" onclick="doRegister()">Buat Akun Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 2. SCREEN BERANDA (HOME) ══════════ -->
+  <div class="screen" id="s-home">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div class="brand-sm"><span class="zee">zee</span><span class="done">done</span></div>
+        <div class="tbicons">
+          <button class="ib" onclick="openNotifications()" title="Notifikasi">
+            🔔<span class="badge-dot" id="notif-dot" style="display:none"></span>
+          </button>
+          <button class="ib" onclick="if(confirm('Keluar dari akun Zeedone?')) doLogout()" title="Keluar">🚪</button>
+        </div>
+      </div>
+      <div class="greeting">Halo, <strong id="home-name">Siswa</strong> 👋</div>
+    </div>
+
+    <!-- Subscription Hero Card -->
+    <div class="hero-card unsubscribed" id="home-sub-hero">
+      <div class="hero-badge" id="sub-badge">⭐ BELUM BERLANGGANAN</div>
+      <div class="hero-title" id="sub-title">Akses Seluruh Kelas Premium</div>
+      <div class="hero-sub" id="sub-desc">Aktifkan paket langganan untuk bebas akses ratusan video materi, latihan soal, dan bimbingan belajar.</div>
+      <button class="hero-btn" id="sub-btn" onclick="navTo('langganan')">⭐ Berlangganan Sekarang</button>
+    </div>
+
+    <!-- Quick Navigation Menu -->
+    <div class="sec-title">Menu Belajar</div>
+    <div class="qgrid">
+      <div class="qi" onclick="navTo('belajar')">
+        <div class="qi-ico" style="background:#dbeafe">📚</div>
+        <div class="qi-lbl">Semua Kelas</div>
+      </div>
+      <div class="qi" onclick="quickFilterCourse('free')">
+        <div class="qi-ico" style="background:#dcfce7">🆓</div>
+        <div class="qi-lbl">Kelas Gratis</div>
+      </div>
+      <div class="qi" onclick="quickFilterCourse('paid')">
+        <div class="qi-ico" style="background:#f3e8ff">💎</div>
+        <div class="qi-lbl">Kelas Berbayar</div>
+      </div>
+      <div class="qi" onclick="navTo('tutor')">
+        <div class="qi-ico" style="background:#ecfdf5">👨‍🏫</div>
+        <div class="qi-lbl">Profil Tutor</div>
+      </div>
+      <div class="qi" onclick="switchBelajarTab('video'); navTo('belajar');">
+        <div class="qi-ico" style="background:#fee2e2">▶️</div>
+        <div class="qi-lbl">Video Materi</div>
+      </div>
+      <div class="qi" onclick="navTo('langganan')">
+        <div class="qi-ico" style="background:#fef3c7">⭐</div>
+        <div class="qi-lbl">Paket Belajar</div>
+      </div>
+      <div class="qi" onclick="openMyCoursesModal()">
+        <div class="qi-ico" style="background:#e0e7ff">🎓</div>
+        <div class="qi-lbl">Kelas Saya</div>
+      </div>
+      <div class="qi" onclick="openNotifications()">
+        <div class="qi-ico" style="background:#fce7f3">🔔</div>
+        <div class="qi-lbl">Notifikasi</div>
+      </div>
+    </div>
+
+    <!-- Popular Courses Preview -->
+    <div class="sec-title">
+      <span>Kelas Pilihan Populer</span>
+      <a onclick="navTo('belajar')">Lihat Semua →</a>
+    </div>
+    <div class="cscroll" id="home-courses">
+      <div style="padding:20px;color:var(--muted);font-size:13px">Memuat kelas...</div>
+    </div>
+
+    <!-- My Enrolled Courses Section -->
+    <div class="sec-title">
+      <span>Kelas Terdaftar Kamu</span>
+      <a onclick="openMyCoursesModal()">Kelola →</a>
+    </div>
+    <div id="home-my-courses" style="padding:0 14px">
+      <div style="padding:16px;color:var(--muted);font-size:13px;background:var(--gray-50);border-radius:14px;text-align:center">
+        Memuat kelas kamu...
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 3. SCREEN BELAJAR (E-LEARNING) ══════════ -->
+  <div class="screen" id="s-belajar">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div style="font-family:var(--fh);font-size:19px;font-weight:800">📚 Ruang Belajar</div>
+        <button class="ib" onclick="loadCourses()" title="Muat Ulang">🔄</button>
+      </div>
+    </div>
+
+    <div class="belajar-tabs">
+      <div class="btab on" id="btab-courses" onclick="switchBelajarTab('courses')">🎓 Katalog Kelas</div>
+      <div class="btab" id="btab-video" onclick="switchBelajarTab('video')">▶️ Video Gratis SMA</div>
+    </div>
+
+    <!-- Tab 1: Course Catalog -->
+    <div id="panel-courses">
+      <div class="sbar">
+        <span>🔍</span>
+        <input id="course-search" type="text" placeholder="Cari materi atau nama kelas..." oninput="debounceCourseSearch()">
+      </div>
+
+      <!-- Type Filter Pills -->
+      <div class="filter-pills" id="type-pills">
+        <div class="fpill on" onclick="filterCourseType(this, '')">Semua Kelas</div>
+        <div class="fpill" onclick="filterCourseType(this, 'free')">🆓 Kelas Gratis</div>
+        <div class="fpill" onclick="filterCourseType(this, 'paid')">💎 Khusus Langganan</div>
+      </div>
+
+      <!-- Subject Filter Pills -->
+      <div class="filter-pills" id="subject-pills">
+        <div class="fpill on" onclick="filterCourseSubject(this, '')">Semua Mata Pelajaran</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Matematika')">Matematika</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Fisika')">Fisika</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Kimia')">Kimia</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Biologi')">Biologi</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Bahasa Inggris')">Bahasa Inggris</div>
+        <div class="fpill" onclick="filterCourseSubject(this, 'Ekonomi')">Ekonomi</div>
+      </div>
+
+      <div class="cgrid" id="course-grid">
+        <div class="skeleton" style="height:160px;border-radius:14px"></div>
+        <div class="skeleton" style="height:160px;border-radius:14px"></div>
+        <div class="skeleton" style="height:160px;border-radius:14px"></div>
+        <div class="skeleton" style="height:160px;border-radius:14px"></div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Free Video Library -->
+    <div id="panel-video" style="display:none">
+      <div class="sbar">
+        <span>🔍</span>
+        <input id="video-search" type="text" placeholder="Cari bab atau materi pelajaran..." oninput="renderVideoList()">
+      </div>
+      <div class="kelas-pills">
+        <div class="kpill on" onclick="filterVideoKelas(this,'Kelas 10')">Kelas 10</div>
+        <div class="kpill" onclick="filterVideoKelas(this,'Kelas 11')">Kelas 11</div>
+        <div class="kpill" onclick="filterVideoKelas(this,'Kelas 12')">Kelas 12</div>
+        <div class="kpill" onclick="filterVideoKelas(this,'TOEFL/IELTS')">TOEFL/IELTS</div>
+      </div>
+      <div class="video-section" id="video-subject-list"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ 4. SCREEN LANGGANAN (SUBSCRIPTION) ══════════ -->
+  <div class="screen" id="s-langganan">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div style="font-family:var(--fh);font-size:19px;font-weight:800">⭐ Paket Belajar</div>
+        <button class="ib" onclick="loadSubscriptionStatus()" title="Muat Ulang">🔄</button>
+      </div>
+    </div>
+
+    <div class="sub-hero">
+      <div class="sub-hero-title">Investasi Masa Depan</div>
+      <div class="sub-hero-sub">Dapatkan akses tak terbatas ke seluruh materi pembelajaran, rangkuman, dan ujian terstruktur.</div>
+    </div>
+
+    <!-- Current Subscription Status Box -->
+    <div style="padding:0 14px 14px">
+      <div id="current-sub-box" style="background:var(--gray-50);border:1px solid var(--border);border-radius:16px;padding:16px;text-align:center">
+        <div style="font-size:12px;color:var(--muted);font-weight:700">STATUS SAAT INI</div>
+        <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px" id="sub-status-title">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="plan-cards">
+      <!-- Monthly Plan -->
+      <div class="plan-card">
+        <div class="plan-header">
+          <div class="plan-name">Paket Bulanan</div>
+          <div class="plan-price">Rp 49.000<span> / bln</span></div>
+        </div>
+        <div class="plan-desc">Akses belajar fleksibel 30 hari penuh untuk persiapan ujian & ulangan.</div>
+        <ul class="plan-features">
+          <li>Akses seluruh kelas berbayar tanpa batas</li>
+          <li>Video pembelajaran kualitas HD</li>
+          <li>Latihan soal & pembahasan lengkap</li>
+          <li>Sertifikat kelulusan digital</li>
+        </ul>
+        <button class="btn-sub outline" onclick="doSubscribe('monthly')">Pilih Paket Bulanan</button>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="plan-card featured">
+        <div class="plan-ribbon">🔥 HEMAT 32%</div>
+        <div class="plan-header">
+          <div class="plan-name">Paket Tahunan</div>
+          <div class="plan-price">Rp 399.000<span> / thn</span></div>
+        </div>
+        <div class="plan-desc">Pilihan terpopuler! Pendampingan belajar lengkap selama 365 hari.</div>
+        <ul class="plan-features">
+          <li>Semua fasilitas Paket Bulanan</li>
+          <li>Akses 365 hari penuh tanpa jeda</li>
+          <li>Prioritas akses materi & kurikulum baru</li>
+          <li>Bonus modul rangkuman persiapan UTBK/SNBT</li>
+        </ul>
+        <button class="btn-sub primary" onclick="doSubscribe('yearly')">Pilih Paket Tahunan ⭐</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 5. SCREEN TUTOR PROFILES ══════════ -->
+  <div class="screen" id="s-tutor">
+    <div class="topbar">
+      <div class="topbar-row">
+        <div style="font-family:var(--fh);font-size:19px;font-weight:800">👨‍🏫 Profil Tutor</div>
+        <button class="ib" onclick="loadTutors()" title="Muat Ulang">🔄</button>
+      </div>
+    </div>
+
+    <div class="tutor-hero">
+      <div class="tutor-hero-title">Tutor Berpengalaman</div>
+      <div class="tutor-hero-sub">Belajar didampingi oleh pengajar lulusan PTN ternama (UI, ITB, UGM) dengan dedikasi tinggi.</div>
+    </div>
+
+    <div class="sbar">
+      <span>🔍</span>
+      <input id="tutor-search" type="text" placeholder="Cari nama guru atau mata pelajaran..." oninput="debounceTutorSearch()">
+    </div>
+
+    <div class="filter-pills" id="tutor-pills">
+      <div class="fpill on" onclick="filterTutorSubject(this, '')">Semua Tutor</div>
+      <div class="fpill" onclick="filterTutorSubject(this, 'Matematika')">Matematika</div>
+      <div class="fpill" onclick="filterTutorSubject(this, 'Fisika')">Fisika</div>
+      <div class="fpill" onclick="filterTutorSubject(this, 'Kimia')">Kimia</div>
+      <div class="fpill" onclick="filterTutorSubject(this, 'Bahasa Inggris')">Bahasa Inggris</div>
+      <div class="fpill" onclick="filterTutorSubject(this, 'Biologi')">Biologi</div>
+    </div>
+
+    <div class="tutor-list" id="tutor-list">
+      <div class="skeleton" style="height:120px;border-radius:18px"></div>
+      <div class="skeleton" style="height:120px;border-radius:18px"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ BOTTOM NAVIGATION ══════════ -->
+  <nav id="bnav" style="display:none;">
+    <button class="ni active" id="nav-home" onclick="navTo('home')">
+      <span class="ico">🏠</span>Beranda
+    </button>
+    <button class="ni" id="nav-belajar" onclick="navTo('belajar')">
+      <span class="ico">📚</span>Belajar
+    </button>
+    <button class="ni" id="nav-langganan" onclick="navTo('langganan')">
+      <span class="ico">⭐</span>Langganan
+    </button>
+    <button class="ni" id="nav-tutor" onclick="navTo('tutor')">
+      <span class="ico">👨‍🏫</span>Tutor
+    </button>
+  </nav>
+
+  <!-- ══════════ MODALS ══════════ -->
+
+  <!-- Modal Video Player -->
+  <div class="overlay" id="modal-video">
+    <div class="modal" id="video-modal-content"></div>
+  </div>
+
+  <!-- Modal Tutor Detail -->
+  <div class="overlay" id="modal-tutor-detail">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-tutor-detail')">✕</button>
+      <div id="tutor-detail-body"></div>
+    </div>
+  </div>
+
+  <!-- Modal Notifications -->
+  <div class="overlay" id="modal-notif">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-notif')">✕</button>
+      <div class="modal-title">Notifikasi Belajar 🔔</div>
+      <div id="notif-list" style="margin-top:14px"></div>
+      <button class="btn-primary" style="background:var(--gray-100);color:var(--text);margin-top:14px" onclick="markAllNotificationsRead()">Tandai Semua Dibaca</button>
+    </div>
+  </div>
+
+  <!-- Modal Enrolled Courses -->
+  <div class="overlay" id="modal-my-courses">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('modal-my-courses')">✕</button>
+      <div class="modal-title">Kelas Terdaftar Saya 🎓</div>
+      <div class="modal-sub">Daftar kelas yang sedang kamu ikuti</div>
+      <div id="my-courses-full-list" style="margin-top:12px;display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast-el"></div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE & VARIABLES
+// ═══════════════════════════════════════════════
+const API = '';
+let token = localStorage.getItem('zd_token') || '';
+let user = JSON.parse(localStorage.getItem('zd_user') || 'null');
+
+let currentBelajarTab = 'courses';
+let currentVideoKelas = 'Kelas 10';
+let currentCourseSubject = '';
+let currentCourseType = '';
+let currentCourseSearch = '';
+let courseSearchTimeout = null;
+
+let currentTutorSubject = '';
+let currentTutorSearch = '';
+let tutorSearchTimeout = null;
+
+// ═══════════════════════════════════════════════
+//  VIDEO LIBRARY (SMA & TOEFL)
+// ═══════════════════════════════════════════════
+const VIDEO_LIBRARY = {
+  'Matematika': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Eksponen & Logaritma', emoji:'🔢',
+        videos:[
+          { id:'VJdmwh-ECQo', judul:'Eksponen – Konsep Bilangan Berpangkat', durasi:'22 mnt' },
+          { id:'AlrOq3W7IZ4', judul:'Eksponen Itu Asyik! – Jerome Polin', durasi:'29 mnt' },
+          { id:'FqYIq9kdshM', judul:'Logaritma Itu Gampang! – Jerome Polin', durasi:'31 mnt' },
+          { id:'3b8Kd4NsmDM', judul:'Logaritma Kelas 10 – Soal & Pembahasan', durasi:'18 mnt' }
+        ]},
+      { bab:'Bab 2 – Persamaan Kuadrat & Fungsi', emoji:'📊',
+        videos:[
+          { id:'HE_9PX0vjJk', judul:'Persamaan Kuadrat – Pemfaktoran & ABC', durasi:'26 mnt' },
+          { id:'tDeXVkK3KIE', judul:'Grafik Fungsi Kuadrat & Titik Puncak', durasi:'21 mnt' }
+        ]},
+      { bab:'Bab 3 – Trigonometri', emoji:'📐',
+        videos:[
+          { id:'KNFVxzj6TCE', judul:'Perbandingan Trigonometri Segitiga Siku-siku', durasi:'23 mnt' },
+          { id:'10ftb68aoSA', judul:'Sudut Istimewa Trigonometri', durasi:'18 mnt' }
+        ]}
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Polinomial (Suku Banyak)', emoji:'🔁',
+        videos:[
+          { id:'HE_9PX0vjJk', judul:'Operasi Aljabar & Teorema Sisa Polinomial', durasi:'25 mnt' }
+        ]},
+      { bab:'Bab 2 – Matriks & Determinan', emoji:'🔢',
+        videos:[
+          { id:'KNFVxzj6TCE', judul:'Perkalian Matriks & Invers Matriks', durasi:'28 mnt' }
+        ]}
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Limit Fungsi Aljabar & Trigonometri', emoji:'📈',
+        videos:[
+          { id:'HE_9PX0vjJk', judul:'Konsep Limit Mendekati Nilai Tertentu', durasi:'24 mnt' }
+        ]},
+      { bab:'Bab 2 – Integral Tentu & Tak Tentu', emoji:'∫',
+        videos:[
+          { id:'10ftb68aoSA', judul:'Teknik Pengintegralan & Luas Daerah', durasi:'30 mnt' }
+        ]}
+    ]
+  },
+  'Fisika': {
+    'Kelas 10': [
+      { bab:'Bab 1 – Besaran & Pengukuran', emoji:'📏',
+        videos:[
+          { id:'8xK_k5XJ_58', judul:'Dimensi & Angka Penting Fisika', durasi:'18 mnt' }
+        ]},
+      { bab:'Bab 2 – Kinematika Gerak Lurus', emoji:'⚡',
+        videos:[
+          { id:'e2X_t2P-2d4', judul:'GLB & GLBB – Grafik dan Persamaan', durasi:'25 mnt' }
+        ]}
+    ],
+    'Kelas 11': [
+      { bab:'Bab 1 – Dinamika Rotasi & Kesetimbangan', emoji:'🔄',
+        videos:[
+          { id:'8xK_k5XJ_58', judul:'Momen Inersia & Torsi', durasi:'22 mnt' }
+        ]}
+    ],
+    'Kelas 12': [
+      { bab:'Bab 1 – Listrik Statis & Dinamis', emoji:'💡',
+        videos:[
+          { id:'e2X_t2P-2d4', judul:'Hukum Coulomb & Medan Listrik', durasi:'26 mnt' }
+        ]}
+    ]
+  },
+  'Bahasa Inggris': {
+    'Kelas 10': [
+      { bab:'Grammar – Tenses & Sentence Structure', emoji:'✏️',
+        videos:[
+          { id:'8e6J0NkMPbQ', judul:'Mastering 16 Tenses with Ease', durasi:'35 mnt' }
+        ]}
+    ],
+    'TOEFL/IELTS': [
+      { bab:'TOEFL Preparation', emoji:'🎓',
+        videos:[
+          { id:'JK42eFIxxOA', judul:'Structure and Written Expression Strategy', durasi:'28 mnt' }
+        ]}
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════
+//  API CLIENT
+// ═══════════════════════════════════════════════
+async function api(method, path, body) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+    },
+    ...(body ? { body: JSON.stringify(body) } : {})
+  };
+  try {
+    const res = await fetch(API + path, opts);
+    return await res.json();
+  } catch(e) {
+    return { success: false, message: 'Gagal terhubung ke server.' };
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+let toastTimer = null;
+function toast(msg, dur = 2600) {
+  const el = document.getElementById('toast-el');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ═══════════════════════════════════════════════
+//  AUTHENTICATION & APP INIT
+// ═══════════════════════════════════════════════
+function switchAuthTab(tab) {
+  document.getElementById('tab-login').classList.toggle('on', tab === 'login');
+  document.getElementById('tab-reg').classList.toggle('on', tab === 'reg');
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-reg').style.display = tab === 'reg' ? 'block' : 'none';
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const password = document.getElementById('l-pass').value;
+  if(!email || !password) { toast('⚠️ Isi email dan password!'); return; }
+
+  const res = await api('POST', '/api/auth/login', { email, password });
+  if(res.success) {
+    token = res.token;
+    user = res.user;
+    localStorage.setItem('zd_token', token);
+    localStorage.setItem('zd_user', JSON.stringify(user));
+    toast('🎉 Selamat datang, ' + user.name.split(' ')[0] + '!');
+    enterApp();
+  } else {
+    toast('❌ ' + res.message);
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const phone = document.getElementById('r-phone').value.trim();
+  const password = document.getElementById('r-pass').value;
+  if(!name || !email || !password) { toast('⚠️ Lengkapi data registrasi!'); return; }
+
+  const res = await api('POST', '/api/auth/register', { name, email, phone, password });
+  if(res.success) {
+    token = res.token;
+    user = res.user;
+    localStorage.setItem('zd_token', token);
+    localStorage.setItem('zd_user', JSON.stringify(user));
+    toast('🎉 Akun berhasil dibuat!');
+    enterApp();
+  } else {
+    toast('❌ ' + res.message);
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('zd_token');
+  localStorage.removeItem('zd_user');
+  token = '';
+  user = null;
+  document.getElementById('bnav').style.display = 'none';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('s-splash').classList.add('active');
+  toast('👋 Berhasil keluar dari akun.');
+}
+
+function enterApp() {
+  document.getElementById('s-splash').classList.remove('active');
+  document.getElementById('bnav').style.display = 'flex';
+  navTo('home');
+  loadUserData();
+}
+
+// ═══════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════
+const navMap = {
+  home: 's-home',
+  belajar: 's-belajar',
+  langganan: 's-langganan',
+  tutor: 's-tutor'
+};
+
+function navTo(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const sid = navMap[name];
+  if(sid) {
+    const el = document.getElementById(sid);
+    el.classList.add('active');
+    el.scrollTop = 0;
+  }
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  const btn = document.getElementById('nav-' + name);
+  if(btn) btn.classList.add('active');
+
+  if(name === 'home') loadUserData();
+  if(name === 'belajar') {
+    if(currentBelajarTab === 'courses') loadCourses();
+    else renderVideoList();
+  }
+  if(name === 'langganan') loadSubscriptionStatus();
+  if(name === 'tutor') loadTutors();
+}
+
+// ═══════════════════════════════════════════════
+//  USER DATA & HOME SCREEN
+// ═══════════════════════════════════════════════
+async function loadUserData() {
+  const res = await api('GET', '/api/auth/me');
+  if(!res.success) { doLogout(); return; }
+
+  user = res.user;
+  localStorage.setItem('zd_user', JSON.stringify(user));
+
+  document.getElementById('home-name').textContent = user.name.split(' ')[0];
+
+  // Subscription Hero update
+  const heroCard = document.getElementById('home-sub-hero');
+  const badge = document.getElementById('sub-badge');
+  const title = document.getElementById('sub-title');
+  const desc = document.getElementById('sub-desc');
+  const btn = document.getElementById('sub-btn');
+
+  if(user.subscription) {
+    heroCard.className = 'hero-card subscribed';
+    badge.textContent = '👑 MEMBER PREMIUM (' + (user.subscription.plan === 'yearly' ? 'TAHUNAN' : 'BULANAN') + ')';
+    title.textContent = 'Paket Belajar Aktif';
+    desc.textContent = 'Akses penuh ke semua kelas terbuka. Sisa masa aktif: ' + user.subscription.days_left + ' hari lagi.';
+    btn.textContent = 'Kelola Langganan';
+  } else {
+    heroCard.className = 'hero-card unsubscribed';
+    badge.textContent = '⭐ BELUM BERLANGGANAN';
+    title.textContent = 'Akses Seluruh Kelas Premium';
+    desc.textContent = 'Aktifkan paket langganan untuk bebas akses ratusan video materi, latihan soal, dan bimbingan belajar.';
+    btn.textContent = '⭐ Berlangganan Mulai Rp 49rb';
+  }
+
+  // Notif badge dot
+  if(user.stats?.unread_notifications > 0) {
+    document.getElementById('notif-dot').style.display = 'block';
+  } else {
+    document.getElementById('notif-dot').style.display = 'none';
+  }
+
+  loadHomeCourses();
+  loadHomeMyCourses();
+}
+
+async function loadHomeCourses() {
+  const res = await api('GET', '/api/courses?limit=6&sort=popular');
+  if(!res.success) return;
+
+  const html = res.courses.map(c => `
+    <div class="ccard" onclick="handleCourseClick('${c._id}', '${esc(c.title)}', ${c.is_free}, ${c.is_enrolled ? 1 : 0}, ${c.my_progress || 0})">
+      <div class="cc-thumb" style="background:${subjectBg(c.subject)}">
+        <span class="cc-access-badge ${c.is_free ? 'badge-free' : 'badge-sub'}">
+          ${c.is_free ? 'GRATIS' : '👑 LANGGANAN'}
+        </span>
+        ${c.thumbnail || '📚'}
+      </div>
+      <div class="cc-body">
+        <div class="cc-subj">${c.subject}</div>
+        <div class="cc-title">${c.title}</div>
+        <div class="cc-meta">
+          <span>⭐ ${c.rating || 4.8}</span>
+          <span>${(c.total_students || 0).toLocaleString('id-ID')} siswa</span>
+        </div>
+        ${c.is_enrolled ? `
+          <div class="cc-prog"><div class="cc-bar" style="width:${c.my_progress || 0}%"></div></div>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('home-courses').innerHTML = html || '<div style="padding:16px;color:var(--muted)">Belum ada kelas</div>';
+}
+
+async function loadHomeMyCourses() {
+  const res = await api('GET', '/api/courses/my/enrolled');
+  const container = document.getElementById('home-my-courses');
+  if(!res.success || !res.courses.length) {
+    container.innerHTML = `
+      <div style="padding:16px;color:var(--muted);font-size:13px;background:var(--gray-50);border-radius:14px;text-align:center">
+        Kamu belum mendaftar kelas apa pun.<br>
+        <a onclick="navTo('belajar')" style="color:var(--blue);font-weight:800;cursor:pointer;display:inline-block;margin-top:6px">Mulai Jelajahi Kelas →</a>
+      </div>
+    `;
+    return;
+  }
+
+  const items = res.courses.slice(0, 3).map(c => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--white);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;cursor:pointer"
+         onclick="handleCourseClick('${c._id}', '${esc(c.title)}', ${c.is_free}, 1, ${c.progress || 0})">
+      <div style="width:44px;height:44px;border-radius:10px;background:${subjectBg(c.subject)};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
+        ${c.thumbnail || '📚'}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${c.title}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${c.subject} · Progress: ${c.progress || 0}%</div>
+        <div class="cc-prog" style="margin-top:4px"><div class="cc-bar" style="width:${c.progress || 0}%"></div></div>
+      </div>
+      <span style="font-size:16px;color:var(--blue)">▶</span>
+    </div>
+  `).join('');
+
+  container.innerHTML = items;
+}
+
+// ═══════════════════════════════════════════════
+//  BELAJAR (COURSES & VIDEOS)
+// ═══════════════════════════════════════════════
+function switchBelajarTab(tab) {
+  currentBelajarTab = tab;
+  document.getElementById('btab-courses').className = 'btab' + (tab === 'courses' ? ' on' : '');
+  document.getElementById('btab-video').className = 'btab' + (tab === 'video' ? ' on' : '');
+  document.getElementById('panel-courses').style.display = tab === 'courses' ? 'block' : 'none';
+  document.getElementById('panel-video').style.display = tab === 'video' ? 'block' : 'none';
+  if(tab === 'courses') loadCourses();
+  else renderVideoList();
+}
+
+function quickFilterCourse(type) {
+  navTo('belajar');
+  switchBelajarTab('courses');
+  currentCourseType = type;
+  document.querySelectorAll('#type-pills .fpill').forEach(p => {
+    p.classList.toggle('on', (type === 'free' && p.textContent.includes('Gratis')) ||
+                             (type === 'paid' && p.textContent.includes('Langganan')));
+  });
+  loadCourses();
+}
+
+function filterCourseType(el, type) {
+  currentCourseType = type;
+  document.querySelectorAll('#type-pills .fpill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  loadCourses();
+}
+
+function filterCourseSubject(el, subj) {
+  currentCourseSubject = subj;
+  document.querySelectorAll('#subject-pills .fpill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  loadCourses();
+}
+
+function debounceCourseSearch() {
+  currentCourseSearch = document.getElementById('course-search').value.trim();
+  clearTimeout(courseSearchTimeout);
+  courseSearchTimeout = setTimeout(loadCourses, 350);
+}
+
+async function loadCourses() {
+  const grid = document.getElementById('course-grid');
+  grid.innerHTML = '<div class="skeleton" style="height:160px;border-radius:14px"></div>'.repeat(4);
+
+  let url = '/api/courses?limit=30';
+  if(currentCourseType) url += '&type=' + currentCourseType;
+  if(currentCourseSubject) url += '&subject=' + encodeURIComponent(currentCourseSubject);
+  if(currentCourseSearch) url += '&search=' + encodeURIComponent(currentCourseSearch);
+
+  const res = await api('GET', url);
+  if(!res.success) {
+    grid.innerHTML = '<div style="grid-column:span 2;padding:24px;color:var(--muted);text-align:center">Gagal memuat katalog kelas.</div>';
+    return;
+  }
+
+  if(!res.courses.length) {
+    grid.innerHTML = '<div style="grid-column:span 2;padding:24px;color:var(--muted);text-align:center">Kelas tidak ditemukan.</div>';
+    return;
+  }
+
+  grid.innerHTML = res.courses.map(c => `
+    <div class="cgc" onclick="handleCourseClick('${c._id}', '${esc(c.title)}', ${c.is_free}, ${c.is_enrolled ? 1 : 0}, ${c.my_progress || 0})">
+      <div class="cgc-th" style="background:${subjectBg(c.subject)}">
+        <span class="cgc-badge ${c.is_free ? 'badge-free' : 'badge-sub'}">
+          ${c.is_free ? 'GRATIS' : '👑 LANGGANAN'}
+        </span>
+        ${c.thumbnail || '📚'}
+      </div>
+      <div class="cgc-b">
+        <div class="cgc-subj">${c.subject}</div>
+        <div class="cgc-name">${c.title}</div>
+        <div class="cgc-foot">
+          <span class="cgc-tag ${c.is_free ? 'free' : 'sub'}">
+            ${c.is_enrolled ? '✅ Terdaftar' : (c.is_free ? 'Gratis' : 'Paket Langganan')}
+          </span>
+          <span style="color:var(--muted)">⭐ ${c.rating || 4.8}</span>
+        </div>
+        ${c.is_enrolled ? `
+          <div class="cc-prog" style="margin-top:6px"><div class="cc-bar" style="width:${c.my_progress || 0}%"></div></div>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function handleCourseClick(id, title, isFree, isEnrolled, currentProgress) {
+  // If already enrolled, advance study progress
+  if(isEnrolled) {
+    const nextProgress = Math.min(100, (currentProgress || 0) + 15);
+    await api('PUT', `/api/courses/${id}/progress`, { progress: nextProgress });
+    toast(`📖 Melanjutkan "${title}" — Progress: ${nextProgress}%`);
+    loadCourses();
+    loadHomeCourses();
+    loadHomeMyCourses();
+    return;
+  }
+
+  // If free course: enroll directly
+  if(isFree) {
+    if(!confirm(`Daftar kelas gratis ini sekarang?\n\n"${title}"`)) return;
+    const res = await api('POST', `/api/courses/${id}/enroll`);
+    if(res.success) {
+      toast('🎉 ' + res.message);
+      loadCourses();
+      loadHomeCourses();
+      loadHomeMyCourses();
+    } else {
+      toast('❌ ' + res.message);
+    }
+    return;
+  }
+
+  // If paid course: check subscription
+  if(user?.subscription) {
+    if(!confirm(`Buka akses kelas langganan ini?\n\n"${title}"`)) return;
+    const res = await api('POST', `/api/courses/${id}/enroll`);
+    if(res.success) {
+      toast('🎉 ' + res.message);
+      loadCourses();
+      loadHomeCourses();
+      loadHomeMyCourses();
+    } else {
+      toast('❌ ' + res.message);
+    }
+  } else {
+    if(confirm(`Kelas "${title}" khusus member berlangganan.\n\nBuka halaman paket langganan sekarang?`)) {
+      navTo('langganan');
+    }
+  }
+}
+
+// Video Library Handlers
+function filterVideoKelas(el, kelas) {
+  currentVideoKelas = kelas;
+  document.querySelectorAll('.kpill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  renderVideoList();
+}
+
+function renderVideoList() {
+  const q = (document.getElementById('video-search')?.value || '').toLowerCase();
+  const container = document.getElementById('video-subject-list');
+  const subjects = Object.keys(VIDEO_LIBRARY);
+  let html = '';
+
+  subjects.forEach(subj => {
+    const babs = VIDEO_LIBRARY[subj][currentVideoKelas] || [];
+    if(!babs.length) return;
+    if(q && !subj.toLowerCase().includes(q) && !babs.some(b => b.bab.toLowerCase().includes(q))) return;
+
+    babs.forEach(bab => {
+      if(q && !subj.toLowerCase().includes(q) && !bab.bab.toLowerCase().includes(q) && !bab.videos.some(v => v.judul.toLowerCase().includes(q))) return;
+      html += `
+        <div class="vbab-card" onclick="openVideoPlayer('${esc(subj)}', '${esc(bab.bab)}', '${encodeURIComponent(JSON.stringify(bab.videos))}')">
+          <div class="vbab-head">
+            <div class="vbab-title">
+              <span>${bab.emoji || '📚'}</span>
+              <span>${bab.bab}</span>
+            </div>
+            <span class="vbab-badge">${subj}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">
+            ▶ ${bab.videos.length} video pembelajaran · Klik untuk memutar
+          </div>
+        </div>
+      `;
+    });
+  });
+
+  container.innerHTML = html || '<div style="padding:20px;text-align:center;color:var(--muted)">Tidak ada video materi pada kelas ini.</div>';
+}
+
+function openVideoPlayer(subj, babTitle, encodedVideos) {
+  const videos = JSON.parse(decodeURIComponent(encodedVideos));
+  const modalContent = document.getElementById('video-modal-content');
+  const first = videos[0];
+
+  modalContent.innerHTML = `
+    <button class="modal-close" onclick="closeModal('modal-video')">✕</button>
+    <div class="modal-title">${babTitle}</div>
+    <div class="modal-sub">${subj} · ${currentVideoKelas}</div>
+    <div class="yt-player-wrap">
+      <iframe id="yt-iframe" src="https://www.youtube.com/embed/${first.id}?autoplay=1" allowfullscreen allow="autoplay"></iframe>
+    </div>
+    <div class="video-list-scroll">
+      ${videos.map((v, i) => `
+        <div class="vli ${i === 0 ? 'active' : ''}" onclick="switchVideo(this, '${v.id}')">
+          <div class="vli-num">${i + 1}</div>
+          <div class="vli-info">
+            <div class="vli-title">${v.judul}</div>
+            <div class="vli-meta">Durasi: ${v.durasi}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  openModal('modal-video');
+}
+
+function switchVideo(el, id) {
+  document.querySelectorAll('.vli').forEach(v => v.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('yt-iframe').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+}
+
+// ═══════════════════════════════════════════════
+//  SUBSCRIPTION ACTIONS
+// ═══════════════════════════════════════════════
+async function loadSubscriptionStatus() {
+  const res = await api('GET', '/api/subscriptions/status');
+  const box = document.getElementById('current-sub-box');
+
+  if(res.success && res.is_subscribed) {
+    const sub = res.subscription;
+    box.style.background = '#ecfdf5';
+    box.style.borderColor = '#6ee7b7';
+    box.innerHTML = `
+      <div style="font-size:12px;color:#047857;font-weight:800">PAKET BELAJAR AKTIF</div>
+      <div style="font-size:18px;font-weight:900;color:#065f46;margin-top:2px">
+        👑 ${sub.plan === 'yearly' ? 'Paket Tahunan' : 'Paket Bulanan'}
+      </div>
+      <div style="font-size:12px;color:#047857;margin-top:4px">
+        Sisa ${sub.days_left} hari lagi (Berakhir: ${formatDateOnly(sub.expires_at)})
+      </div>
+      <button onclick="doCancelSubscription()" style="margin-top:10px;padding:6px 14px;border:1px solid #fca5a5;background:#fef2f2;color:#b91c1c;border-radius:8px;font-size:11px;font-weight:800;cursor:pointer">
+        Batalkan Langganan
+      </button>
+    `;
+  } else {
+    box.style.background = 'var(--gray-50)';
+    box.style.borderColor = 'var(--border)';
+    box.innerHTML = `
+      <div style="font-size:12px;color:var(--muted);font-weight:700">STATUS SAAT INI</div>
+      <div style="font-size:16px;font-weight:900;color:var(--text);margin-top:4px">Belum Berlangganan</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Pilih salah satu paket di bawah untuk membuka semua akses kelas premium.</div>
+    `;
+  }
+}
+
+async function doSubscribe(plan) {
+  const planName = plan === 'yearly' ? 'Paket Tahunan (Rp 399.000)' : 'Paket Bulanan (Rp 49.000)';
+  if(!confirm(`Konfirmasi aktivasi ${planName}?\n\n(Simulasi: paket akan langsung aktif seketika)`)) return;
+
+  const res = await api('POST', '/api/subscriptions/subscribe', { plan });
+  if(res.success) {
+    toast('🎉 ' + res.message);
+    loadSubscriptionStatus();
+    loadUserData();
+  } else {
+    toast('❌ ' + res.message);
+  }
+}
+
+async function doCancelSubscription() {
+  if(!confirm('Apakah kamu yakin ingin membatalkan paket langganan aktif?')) return;
+  const res = await api('POST', '/api/subscriptions/cancel');
+  if(res.success) {
+    toast('ℹ️ ' + res.message);
+    loadSubscriptionStatus();
+    loadUserData();
+  } else {
+    toast('❌ ' + res.message);
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  TUTOR PROFILES
+// ═══════════════════════════════════════════════
+function filterTutorSubject(el, subj) {
+  currentTutorSubject = subj;
+  document.querySelectorAll('#tutor-pills .fpill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  loadTutors();
+}
+
+function debounceTutorSearch() {
+  currentTutorSearch = document.getElementById('tutor-search').value.trim();
+  clearTimeout(tutorSearchTimeout);
+  tutorSearchTimeout = setTimeout(loadTutors, 350);
+}
+
+async function loadTutors() {
+  const list = document.getElementById('tutor-list');
+  list.innerHTML = '<div class="skeleton" style="height:120px;border-radius:18px"></div>'.repeat(3);
+
+  let url = '/api/tutors?limit=20';
+  if(currentTutorSubject) url += '&subject=' + encodeURIComponent(currentTutorSubject);
+  if(currentTutorSearch) url += '&search=' + encodeURIComponent(currentTutorSearch);
+
+  const res = await api('GET', url);
+  if(!res.success) {
+    list.innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">Gagal memuat profil tutor.</div>';
+    return;
+  }
+
+  if(!res.tutors.length) {
+    list.innerHTML = '<div style="padding:20px;color:var(--muted);text-align:center">Tutor tidak ditemukan.</div>';
+    return;
+  }
+
+  list.innerHTML = res.tutors.map(t => `
+    <div class="tutor-card" onclick="openTutorDetail('${esc(t.name)}', '${esc(t.subjects)}', '${esc(t.education || '')}', '${esc(t.bio || '')}', '${t.avatar || '👨‍🏫'}', ${t.rating || 4.8}, ${t.total_students || 0})">
+      <div class="tc-av">${t.avatar || '👨‍🏫'}</div>
+      <div class="tc-info">
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-subj">${t.subjects}</div>
+        ${t.education ? `<div class="tc-edu">🎓 ${t.education}</div>` : ''}
+        <div class="tc-meta">
+          <span class="tc-rating">⭐ ${t.rating || 4.8}</span>
+          <span class="tc-students">👥 ${(t.total_students || 0).toLocaleString('id-ID')} siswa</span>
+        </div>
+      </div>
+      <div style="align-self:center;font-size:16px;color:var(--cyan)">→</div>
+    </div>
+  `).join('');
+}
+
+function openTutorDetail(name, subjects, education, bio, avatar, rating, students) {
+  const body = document.getElementById('tutor-detail-body');
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+      <div style="width:64px;height:64px;border-radius:18px;background:#f0fdf4;border:1px solid #bbf7d0;display:flex;align-items:center;justify-content:center;font-size:32px">
+        ${avatar}
+      </div>
+      <div>
+        <div style="font-size:18px;font-weight:900">${name}</div>
+        <div style="font-size:12px;font-weight:800;color:var(--cyan);margin-top:2px">${subjects}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">🎓 ${education || 'Pengajar Profesional Zeedone'}</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:16px;background:var(--gray-50);padding:12px;border-radius:12px">
+      <div style="flex:1;text-align:center">
+        <div style="font-size:11px;color:var(--muted)">Rating</div>
+        <div style="font-size:16px;font-weight:900;color:#d97706">⭐ ${rating}</div>
+      </div>
+      <div style="flex:1;text-align:center">
+        <div style="font-size:11px;color:var(--muted)">Total Siswa</div>
+        <div style="font-size:16px;font-weight:900;color:var(--text)">${students.toLocaleString('id-ID')}</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px">
+      <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Bio & Pengalaman</div>
+      <div style="font-size:13px;line-height:1.6;color:var(--text);background:var(--gray-50);padding:12px;border-radius:12px">
+        ${bio || 'Berdedikasi dalam membimbing siswa untuk memahami konsep secara komprehensif, menyenangkan, dan berorientasi pada pemecahan masalah (problem solving).'}
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="closeModal('modal-tutor-detail')">Tutup Profil</button>
+  `;
+  openModal('modal-tutor-detail');
+}
+
+// ═══════════════════════════════════════════════
+//  NOTIFICATIONS
+// ═══════════════════════════════════════════════
+async function openNotifications() {
+  const res = await api('GET', '/api/notifications?limit=20');
+  if(!res.success) return;
+
+  const typeEmoji = {
+    welcome: '🎉',
+    course: '📚',
+    subscription: '🌟',
+    achievement: '🏆',
+    info: 'ℹ️',
+    success: '✅',
+    warning: '⚠️'
+  };
+
+  const list = document.getElementById('notif-list');
+  list.innerHTML = res.notifications.map(n => `
+    <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);opacity:${n.is_read ? 0.6 : 1}">
+      <span style="font-size:22px">${typeEmoji[n.type] || '🔔'}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${n.title}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${n.body || ''}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">${formatDate(n.created_at)}</div>
+      </div>
+    </div>
+  `).join('') || '<div style="padding:20px;color:var(--muted);text-align:center">Belum ada notifikasi</div>';
+
+  openModal('modal-notif');
+}
+
+async function markAllNotificationsRead() {
+  await api('PUT', '/api/notifications/read-all');
+  document.getElementById('notif-dot').style.display = 'none';
+  closeModal('modal-notif');
+  toast('✅ Semua notifikasi ditandai sudah dibaca');
+}
+
+// ═══════════════════════════════════════════════
+//  MODAL MY COURSES
+// ═══════════════════════════════════════════════
+async function openMyCoursesModal() {
+  const res = await api('GET', '/api/courses/my/enrolled');
+  const list = document.getElementById('my-courses-full-list');
+
+  if(!res.success || !res.courses.length) {
+    list.innerHTML = '<div style="padding:24px;color:var(--muted);text-align:center">Kamu belum mendaftar kelas apa pun.</div>';
+  } else {
+    list.innerHTML = res.courses.map(c => `
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border:1px solid var(--border);border-radius:14px;cursor:pointer"
+           onclick="closeModal('modal-my-courses'); handleCourseClick('${c._id}', '${esc(c.title)}', ${c.is_free}, 1, ${c.progress || 0})">
+        <div style="width:44px;height:44px;border-radius:10px;background:${subjectBg(c.subject)};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
+          ${c.thumbnail || '📚'}
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:800">${c.title}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${c.subject} · Progress: ${c.progress || 0}%</div>
+          <div class="cc-prog" style="margin-top:4px"><div class="cc-bar" style="width:${c.progress || 0}%"></div></div>
+        </div>
+        <span style="font-size:16px;color:var(--blue)">▶</span>
+      </div>
+    `).join('');
+  }
+
+  openModal('modal-my-courses');
+}
+
+// ═══════════════════════════════════════════════
+//  MODAL HELPERS
+// ═══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if(e.target === ov) ov.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════
+//  COLOR & FORMAT HELPERS
+// ═══════════════════════════════════════════════
+function subjectBg(s) {
+  const m = {
+    Matematika: '#dbeafe',
+    Fisika: '#dcfce7',
+    Kimia: '#fae8ff',
+    Biologi: '#ecfdf5',
+    'Bahasa Inggris': '#fff7ed',
+    Ekonomi: '#fef9c3',
+    Teknologi: '#e0f2fe'
+  };
+  return m[s] || '#f1f5f9';
+}
+
+function formatDate(dt) {
+  if(!dt) return '-';
+  const d = new Date(dt), now = new Date(), diff = Math.floor((now - d) / 1000);
+  if(diff < 60) return 'Baru saja';
+  if(diff < 3600) return Math.floor(diff / 60) + ' menit lalu';
+  if(diff < 86400) return Math.floor(diff / 3600) + ' jam lalu';
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function formatDateOnly(dt) {
+  if(!dt) return '-';
+  return new Date(dt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function esc(s) {
+  return String(s || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+}
+
+// ═══════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════
+(async () => {
+  if(token) {
+    const res = await api('GET', '/api/auth/me');
+    if(res.success) {
+      user = res.user;
+      localStorage.setItem('zd_user', JSON.stringify(user));
+      enterApp();
+    } else {
+      doLogout();
+    }
+  }
+})();
+</script>
+</body>
+</html>
